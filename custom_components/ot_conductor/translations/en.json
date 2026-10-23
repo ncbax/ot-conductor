@@ -1,0 +1,148 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to OwnTone",
+        "description": "Enter the address of your OwnTone server.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "push_port": "Push updates port"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the OwnTone server.",
+          "port": "OwnTone's web/API port (3689 by default).",
+          "push_port": "OwnTone's websocket port, used for instant updates instead of polling. It is set with websocket_port in owntone.conf (3688 by default) and must be enabled there. Set to 0 to turn push updates off and use polling only."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach OwnTone at that address.",
+      "push_disabled": "OwnTone reports that its websocket is disabled. Enable websocket_port in owntone.conf, or enter 0 to use polling only.",
+      "cannot_connect_push": "Couldn't connect to the push port. Check that websocket_port is set and enabled in owntone.conf and that this port is reachable, or enter 0 to use polling only."
+    },
+    "abort": {
+      "already_configured": "This OwnTone server is already set up."
+    }
+  },
+  "services": {
+    "set_volume": {
+      "name": "Set volume",
+      "description": "Sets or steps the volume of one or more outputs in parallel. The Master media player (or \"all\") changes the OwnTone master volume with a single call. Send either a volume or a step.",
+      "fields": {
+        "outputs": {
+          "name": "Outputs",
+          "description": "Pick the speakers' media players. Picking the Master media player means all outputs. In YAML you can also use output names or IDs, or \"all\"."
+        },
+        "volume": {
+          "name": "Volume",
+          "description": "Absolute volume, 0 to 100."
+        },
+        "step": {
+          "name": "Step",
+          "description": "Relative change, -100 to 100."
+        }
+      }
+    },
+    "play": {
+      "name": "Play audio",
+      "description": "Optionally selects outputs and sets the volume, then adds a stream URL or library item (playlist, artist or album) to the queue and starts playback.",
+      "fields": {
+        "uri": {
+          "name": "URI",
+          "description": "Stream url, playlist, artist or album object uri"
+        },
+        "outputs": {
+          "name": "Outputs",
+          "description": "Speakers to play on (their media players, or the Master media player for all). Leave empty to keep the current selection."
+        },
+        "volume": {
+          "name": "Volume",
+          "description": "Volume to set before playing. Uses the master volume if no outputs are given."
+        },
+        "clear": {
+          "name": "Clear queue",
+          "description": "Empty the queue before adding the URL."
+        },
+        "start": {
+          "name": "Start playback",
+          "description": "Start playing right away."
+        },
+        "raise_error": {
+          "name": "Raise error on failure",
+          "description": "When on, a failure stops the script with an error. When off, the action finishes normally and sets the response variable (if you've named one) to ok: false. The response also includes the error, the HTTP status (when OwnTone returns one), and the stage that failed, so you can handle the failure yourself. Problems with the inputs, such as an unknown speaker, always raise an error."
+        }
+      }
+    },
+    "stop": {
+      "name": "Stop",
+      "description": "Stops playback."
+    },
+    "pause": {
+      "name": "Pause",
+      "description": "Pauses playback and keeps your place in the queue, so playing again resumes where it left off. Stop ends playback instead."
+    },
+    "resume": {
+      "name": "Resume",
+      "description": "Continues playback of what is already in the queue, picking up where Pause left off. To play something new, use Play audio instead."
+    },
+    "fade": {
+      "name": "Fade volume",
+      "description": "Moves the volume to a target level. Give a total duration and the timing is worked out for you, so the volume moves evenly and arrives exactly when the time is up. Or give a number of steps and the time between them. Fades up or down depending on the target. Starting a new fade, or setting the volume, on an output cancels the fade already running there.",
+      "fields": {
+        "outputs": {
+          "name": "Outputs",
+          "description": "Pick the speakers' media players. Picking the Master media player means all outputs. In YAML you can also use output names or IDs, or \"all\"."
+        },
+        "to": {
+          "name": "Target volume",
+          "description": "Volume to end at, 0 to 100."
+        },
+        "from": {
+          "name": "Start volume",
+          "description": "Volume to start from. Defaults to each output's current volume."
+        },
+        "duration": {
+          "name": "Total duration",
+          "description": "How long the whole fade should take, for example 30 minutes. The time between changes is calculated so the volume moves evenly and reaches the target when the time is up: one step per volume point by default, and never faster than one change every 0.5 seconds. Leave empty (or 0) to use steps and interval instead."
+        },
+        "steps": {
+          "name": "Steps",
+          "description": "Number of adjustments, 1 to 200. Default 10 without a duration. With a duration, leave empty for the smoothest fade (one step per volume point)."
+        },
+        "interval": {
+          "name": "Interval",
+          "description": "Seconds to wait between adjustments (decimals allowed). Default 1. Can't be used together with a duration."
+        },
+        "wait": {
+          "name": "Wait for completion",
+          "description": "Hold the service call until the fade finishes. Otherwise the fade runs in the background."
+        }
+      }
+    },
+    "add_outputs": {
+      "name": "Add outputs",
+      "description": "Turns on additional outputs without changing the ones already selected. The Master media player (or \"all\") adds every output.",
+      "fields": {
+        "outputs": {
+          "name": "Outputs",
+          "description": "Pick the speakers' media players. Picking the Master media player means all outputs. In YAML you can also use output names or IDs, or \"all\"."
+        }
+      }
+    },
+    "remove_outputs": {
+      "name": "Remove outputs",
+      "description": "Turns off the given outputs and leaves the rest selected. If that leaves no outputs selected, playback is stopped unless you turn that off. The Master media player (or \"all\") removes every output.",
+      "fields": {
+        "outputs": {
+          "name": "Outputs",
+          "description": "Pick the speakers' media players. Picking the Master media player means all outputs. In YAML you can also use output names or IDs, or \"all\"."
+        },
+        "stop_playback": {
+          "name": "Stop playback",
+          "description": "Stop playback when this leaves no outputs selected. Turn off to keep the queue playing silently."
+        }
+      }
+    }
+  }
+}

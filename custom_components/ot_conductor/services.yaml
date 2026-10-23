@@ -1,0 +1,137 @@
+set_volume:
+  fields:
+    outputs:
+      required: true
+      example: '["Living Room Pod", "Kitchen Music"]'
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: ot_conductor
+              domain: media_player
+    volume:
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+    step:
+      selector:
+        number:
+          min: -100
+          max: 100
+          mode: box
+
+play:
+  fields:
+    uri:
+      required: true
+      example: "http://10.5.2.106:8000/lofi.mp3"
+      selector:
+        text:
+    outputs:
+      example: '["Living Room Pod"]'
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: ot_conductor
+              domain: media_player
+    volume:
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+    clear:
+      default: true
+      selector:
+        boolean:
+    start:
+      default: true
+      selector:
+        boolean:
+    raise_error:
+      default: true
+      selector:
+        boolean:
+
+stop:
+
+pause:
+
+resume:
+
+fade:
+  fields:
+    outputs:
+      required: true
+      example: '["Living Room Pod", "Kitchen Music"]'
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: ot_conductor
+              domain: media_player
+    to:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+    from:
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+    duration:
+      selector:
+        duration:
+    steps:
+      selector:
+        number:
+          min: 1
+          max: 200
+          mode: box
+    interval:
+      selector:
+        number:
+          min: 0
+          max: 60
+          step: 0.1
+          unit_of_measurement: s
+          mode: box
+    wait:
+      default: false
+      selector:
+        boolean:
+
+add_outputs:
+  fields:
+    outputs:
+      required: true
+      example: '["Living Room Pod", "Kitchen Music"]'
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: ot_conductor
+              domain: media_player
+
+remove_outputs:
+  fields:
+    outputs:
+      required: true
+      example: '["Living Room Pod", "Kitchen Music"]'
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - integration: ot_conductor
+              domain: media_player
+    stop_playback:
+      default: true
+      selector:
+        boolean:
